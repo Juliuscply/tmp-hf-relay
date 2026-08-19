@@ -18,5 +18,5 @@ jobs:
       - name: release
         uses: softprops/action-gh-release@v2
         with:
-          tag: dflash2
+          tag_name: dflash2
           files: /tmp/Qwen3.8-27B-DFlash2-Q4_K_M.gguf /tmp/Qwen3.8-27B-DFlash2-Q8_0.gguf
