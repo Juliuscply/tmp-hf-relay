@@ -1,0 +1,22 @@
+name: relay
+on: workflow_dispatch
+permissions:
+  contents: write
+jobs:
+  pull:
+    runs-on: ubuntu-latest
+    steps:
+      - name: dl
+        run: |
+          set -e
+          cd /tmp
+          curl -fL --retry 5 --retry-delay 5 -o Qwen3.8-27B-DFlash2-Q4_K_M.gguf "https://huggingface.co/incoai/Qwen3.8-27B-DFlash2-GGUF/resolve/main/Qwen3.8-27B-DFlash2-Q4_K_M.gguf"
+          curl -fL --retry 5 --retry-delay 5 -o Qwen3.8-27B-DFlash2-Q8_0.gguf "https://huggingface.co/incoai/Qwen3.8-27B-DFlash2-GGUF/resolve/main/Qwen3.8-27B-DFlash2-Q8_0.gguf"
+          [ "$(stat -c%s Qwen3.8-27B-DFlash2-Q4_K_M.gguf)" = "1143006752" ] || { echo BAD-SIZE-Q4; exit 1; }
+          [ "$(stat -c%s Qwen3.8-27B-DFlash2-Q8_0.gguf)" = "2056414752" ] || { echo BAD-SIZE-Q8; exit 1; }
+          echo SIZE-OK
+      - name: release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag: dflash2
+          files: /tmp/Qwen3.8-27B-DFlash2-Q4_K_M.gguf /tmp/Qwen3.8-27B-DFlash2-Q8_0.gguf
