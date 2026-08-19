@@ -16,7 +16,8 @@ jobs:
           [ "$(stat -c%s Qwen3.8-27B-DFlash2-Q8_0.gguf)" = "2056414752" ] || { echo BAD-SIZE-Q8; exit 1; }
           echo SIZE-OK
       - name: release
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: dflash2
-          files: /tmp/Qwen3.8-27B-DFlash2-Q4_K_M.gguf /tmp/Qwen3.8-27B-DFlash2-Q8_0.gguf
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -e
+          gh release create dflash2 /tmp/Qwen3.8-27B-DFlash2-Q4_K_M.gguf /tmp/Qwen3.8-27B-DFlash2-Q8_0.gguf --repo Juliuscply/tmp-hf-relay --title dflash2             || gh release upload dflash2 /tmp/Qwen3.8-27B-DFlash2-Q4_K_M.gguf /tmp/Qwen3.8-27B-DFlash2-Q8_0.gguf --repo Juliuscply/tmp-hf-relay --clobber
